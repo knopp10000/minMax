@@ -11,6 +11,7 @@ public class OthelloBoardState {
 
     public OthelloBoard makeMove(int r, int c, Color color){
         if (!board.isLegalMove(r, c, color)){ //could speed up code if this is removed
+            System.out.println("move was not legal!!! NANI!!!");
             return null;
         }
         OthelloBoard newOthelloBoard = new OthelloBoard();
@@ -21,6 +22,7 @@ public class OthelloBoardState {
             for (int n = -1; n <= 1; n++) {
                 y = r + m;
                 x = c + n;
+                //System.out.println("place wa null desu: " + (newBoard[y][x] == null? "Ya":"Na"));
                 if (x < 0 || x >= OthelloBoard.BOARD_WIDTH || y < 0 || y >= OthelloBoard.BOARD_HEIGHT ||
                         newBoard[y][x] == null || newBoard[y][x].getColor() == color) {
                     continue;
@@ -29,22 +31,30 @@ public class OthelloBoardState {
                 for(int t = 0; t < OthelloBoard.BOARD_WIDTH; t++) {
                     i += m;
                     j += n;
-                    if (j < 0 || j >= OthelloBoard.BOARD_WIDTH || i < 0 || i >= OthelloBoard.BOARD_HEIGHT || newBoard[y][x] == null) {
+                    if (j < 0 || j >= OthelloBoard.BOARD_WIDTH || i < 0 || i >= OthelloBoard.BOARD_HEIGHT || newBoard[i][j] == null) {
+                        //System.out.println(i + "-" + j + " is Null so we stop checking this direction");
                         break;
                     }
+                    //System.out.println("");
                     if (newBoard[i][j].getColor() == color) {
+                        //System.out.println("found other pice to flip to: " + i + "-" + j);
                         newBoard[r][c] = new OthelloPiece(color);
-                        for (int k = 0; k <= t; k++){
-                            newBoard[r+m*(k+1)][c+n*(k+1)].flip();
+                        for (int k = 1; k <= t; k++){
+                            int tX = r+(m*k);
+                            int tY = c+(n*k);
+                            //System.out.println("flipping: " + tX + "-" + tY);
+                            newBoard[r+m*k][c+n*k] = new OthelloPiece(color);
                         }
                         break;
                     } else {
                         continue;
                     }
                 }
+                //System.out.println("One direction flip done");
             }
         }
         togglePlayer();
+        board.setBoard(newBoard);
         newOthelloBoard.setBoard(newBoard);
         return newOthelloBoard;
     }
@@ -61,7 +71,21 @@ public class OthelloBoardState {
         return board;
     }
 
+    public void setBoard(OthelloBoard board) {
+        this.board = board;
+    }
+
     public Color getCurrentColor() {
         return currentColor;
+    }
+
+    public void setCurrentColor(Color currentColor) {
+        this.currentColor = currentColor;
+    }
+
+    public OthelloBoardState clone() {
+        OthelloBoard clonedBoard = new OthelloBoard();
+        clonedBoard.setBoard(board.getBoard().clone());
+        return new OthelloBoardState(board, currentColor);
     }
 }

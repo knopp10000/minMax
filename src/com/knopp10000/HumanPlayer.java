@@ -13,14 +13,14 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Position move(HashSet<Position> legalPositions) {
+    public Position move(OthelloBoardState state, HashSet<Position> legalPositions) {
         while(true){
             System.out.println("Enter your new moves coordinates.");
             System.out.println("Enter Row:");
             int r = sc.nextInt();
-            System.out.println("Enter Row:");
+            System.out.println("Enter Columns:");
             int c = sc.nextInt();
-            System.out.println("You picked the position at: " + r + "-" + c);
+//            System.out.println("You picked the position at: " + r + "-" + c);
             Position pos = new Position(r, c);
             if (!legalPositions.contains(pos)){
                 return pos;

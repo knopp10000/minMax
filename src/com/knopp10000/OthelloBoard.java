@@ -21,7 +21,14 @@ public class OthelloBoard {
     }
 
     public void setBoard(OthelloPiece[][] board) {
-        this.board = board;
+        this.board = new OthelloPiece[BOARD_HEIGHT][BOARD_WIDTH];
+        for (int r = 0; r<BOARD_HEIGHT; r++) {
+            for (int c = 0; c < BOARD_WIDTH; c++){
+                if (board[r][c] != null){
+                    this.board[r][c] = board[r][c];
+                }
+            }
+        }
     }
 
     void init(){
@@ -32,9 +39,9 @@ public class OthelloBoard {
     }
 
     public boolean isFull() {
-        for (int i = 0; i<BOARD_HEIGHT; i++) {
-            for (int j = 0; j < BOARD_WIDTH; j++)
-                if (board[i][j] == null) {
+        for (int r = 0; r<BOARD_HEIGHT; r++) {
+            for (int c = 0; c < BOARD_WIDTH; c++)
+                if (board[r][c] == null) {
                     return false;
                 }
         }
@@ -43,11 +50,14 @@ public class OthelloBoard {
 
     public int computeScore(Color color) {
         int score = 0;
-        for (int i = 0; i<BOARD_HEIGHT; i++) {
-            for (int j = 0; j < BOARD_WIDTH; j++)
-                if (board[i][j].getColor() == color) {
-                    score++;
+        for (int r = 0; r<BOARD_HEIGHT; r++) {
+            for (int c = 0; c < BOARD_WIDTH; c++)
+                if (board[r][c] != null){
+                    if (board[r][c].getColor() == color) {
+                        score++;
+                    }
                 }
+
         }
         return score;
     }
@@ -93,4 +103,33 @@ public class OthelloBoard {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("   ");
+        for (int c = 0; c < BOARD_WIDTH; c++){
+            stringBuilder.append("  ");
+            stringBuilder.append(c);
+        }
+        for (int r = 0; r<BOARD_HEIGHT; r++) {
+            stringBuilder.append("\n");
+            stringBuilder.append(r);
+            stringBuilder.append(": ");
+            for (int c = 0; c < BOARD_WIDTH; c++)
+                if (board[r][c] == null) {
+                    stringBuilder.append(", 0");
+                }else{
+                    stringBuilder.append(board[r][c].getColor() == BLACK ? ", B":", W");
+                }
+        }
+        return stringBuilder.toString();
+    }
+//
+//    public OthelloBoard clone(){
+//        OthelloBoard clone = new OthelloBoard();
+//        clone.setBoard();
+//
+//    }
 }
+

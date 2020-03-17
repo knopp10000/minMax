@@ -1,14 +1,17 @@
 package com.knopp10000;
 
+import java.util.HashSet;
+
 public class OthelloGame {
         Player p1, p2;
         OthelloBoard currentBoard = new OthelloBoard();
         Player currentPlayer;
+        OthelloBoardState state;
 
         public OthelloGame(Player p1, Player p2) {
             this.p1 = p1;
             this.p2 = p2;
-            currentPlayer = p1;
+            currentPlayer = p2;
         }
 
         private void togglePlayer() {
@@ -21,72 +24,25 @@ public class OthelloGame {
 
         public void run() {
             currentBoard.init();
+            state = new OthelloBoardState(currentBoard, currentPlayer.getColor());
 
             boolean over = false;
 
-//            for (int turn = 0; turn < 8 * 8; turn++){
-//                byte[][] curBoard = state.getBoard();
-//                byte curPlayer = state.getPlayer();
-//                int blackScore = OthelloGame.computeScore(curBoard, OthelloGame.B);
-//                int whiteScore = OthelloGame.computeScore(curBoard, OthelloGame.W);
-//                HashSet<Position> disLegalMoves = new HashSet<>(legalMoves);
-//                boolean disOver = over;
-//                Future<Position> future = executor.submit(new TimedPlayer(state, legalMoves));
-//                Position position = null;
-//                if (!over) {
-//                    StringBuilder sb = new StringBuilder();
-//                    sb.append("-------------------------------------\n");
-//                    sb.append("Move Number: ");
-//                    sb.append(turn + 1);
-//                    sb.append('\n');
-//                    sb.append(state);
-//                    sb.append("Player: ");
-//                    if (curPlayer == OthelloGame.B) {
-//                        sb.append(Black.player.name());
-//                        sb.append(" (Black)\n");
-//                    } else {
-//                        sb.append(White.player.name());
-//                        sb.append(" (White)\n");
-//                    }
-//                    sb.append("...thinking...");
-//                    System.out.println(sb.toString());
-//                }
-//
-//                    if (over) {
-//                        break;
-//                    }
-//
-//                    if (legalMoves.size() == 0) {
-//                        StringBuilder sb = new StringBuilder();
-//                        sb.append("-------------------------------------\n");
-//                        if (state.getPlayer() == OthelloGame.B) {
-//                            sb.append(Black.player.name());
-//                            sb.append(" (Black)");
-//                        } else {
-//                            sb.append(White.player.name());
-//                            sb.append(" (White)");
-//                        }
-//                        sb.append(" is out of move!\n");
-//                        state.togglePlayer();
-//                        legalMoves = OthelloGame.getAllLegalMoves(state.getBoard(), state.getPlayer());
-//                        if (legalMoves.size() == 0) {
-//                            if (state.getPlayer() == OthelloGame.B) {
-//                                sb.append(Black.player.name());
-//                                sb.append(" (Black)");
-//                            } else {
-//                                sb.append(White.player.name());
-//                                sb.append(" (White)");
-//                            }
-//                            sb.append(" is out of move!\n");
-//                            sb.append("Game Over");
-//                            over = true;
-//                        }
-//                        System.out.println(sb.toString());
-//                    }
-//                }
-            //executor.shutdown();
-//            }
-//        }
-//        }
+            System.out.println(state.getBoard().toString());
+
+            while(!over){
+                System.out.println("CurrentPlayer is: " + (currentPlayer.getColor() == Color.BLACK ? "Black" : "White"));
+                HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(currentPlayer.getColor());
+                System.out.print("Legal positions are: ");
+                for (Position pos: legalPositions){
+                    System.out.print(pos.getRow() + "-" + pos.getColumn() + ", ");
+                }
+                System.out.println();
+                Position move = currentPlayer.move(state, legalPositions);
+                System.out.println((currentPlayer.getColor() == Color.BLACK ? "Black" : "White") + " picked the position at: " + move.getRow() + "-" + move.getColumn());
+                state.makeMove(move.getRow(), move.getColumn(), currentPlayer.getColor());
+                System.out.println(state.getBoard().toString());
+                togglePlayer();
+            }
         }
 }
