@@ -26,11 +26,10 @@ public class ComputerPlayer extends Player {
 
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
-        Color originalColor = state.getCurrentColor();
 
         for (Position position : legalPositions) {
 //            System.out.println("Testing: " + position.getRow() + "-" + position.getColumn());
-            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
+            state.makeMove(position.getRow(), position.getColumn(), getColor());
             //System.out.println(state.getBoard());
             double responseValue = minVal(state, max, min, depth);
 
@@ -41,25 +40,23 @@ public class ComputerPlayer extends Player {
             }
 
             state.setBoard(originalBoard);
-            state.setCurrentColor(originalColor);
         }
         return maxPosition;
     }
 
     public double maxVal(OthelloBoardState state, double a, double b, int depth) {
-        HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(state.getCurrentColor());
+        HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(getColor());
         if (legalPositions.size() == 0 || depth > LIMIT) {
-            return state.getBoard().computeScore(state.getCurrentColor());
+            return state.getBoard().computeScore(getColor());
         }
 
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
-        Color originalColor = state.getCurrentColor();
 
         double responseValue = Double.NEGATIVE_INFINITY;
 
         for (Position position : legalPositions) {
-            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
+            state.makeMove(position.getRow(), position.getColumn(), getColor());
             responseValue = Math.max(responseValue, minVal(state, a, b, depth + 1));
 
             // pruning
@@ -70,18 +67,17 @@ public class ComputerPlayer extends Player {
             a = Math.max(a, responseValue);
 
             state.setBoard(originalBoard);
-            state.setCurrentColor(originalColor);
         }
         return responseValue;
     }
 
     public double minVal(OthelloBoardState state, double a, double b, int depth) {
-        HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(state.getCurrentColor());
+        HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(opposingColor);
 
         if (legalPositions.size() == 0 || depth > LIMIT) {
 //            return eval(board);
-            System.out.println("deptht is reached or " + state.getCurrentColor() + " has no legalMoves left");
-            return -(state.getBoard().computeScore(state.getCurrentColor()));
+//            System.out.println("deptht is reached or " + state.getCurrentColor() + " has no legalMoves left");
+            return -(state.getBoard().computeScore(opposingColor));
         }
 
 //        System.out.print(state.getCurrentColor() + " can place at: ");
@@ -92,13 +88,12 @@ public class ComputerPlayer extends Player {
 
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
-        Color originalColor = state.getCurrentColor();
 
         double responseValue = Double.POSITIVE_INFINITY;
 
         for (Position position : legalPositions) {
             //System.out.println("Testing: " + position.getRow() + "-" + position.getColumn());
-            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
+            state.makeMove(position.getRow(), position.getColumn(), opposingColor);
             responseValue = Math.min(responseValue, maxVal(state, a, b, depth + 1));
 
 //            System.out.println(position.getRow() + "-" + position.getColumn() + " ");
@@ -111,7 +106,6 @@ public class ComputerPlayer extends Player {
             b = Math.min(b, responseValue);
 
             state.setBoard(originalBoard);
-            state.setCurrentColor(originalColor);
         }
         return responseValue;
     }
