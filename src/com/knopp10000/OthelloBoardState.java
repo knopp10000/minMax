@@ -9,10 +9,10 @@ public class OthelloBoardState {
         this.currentColor = color;
     }
 
-    public OthelloBoard makeMove(int r, int c, Color color){
+    public void makeMove(int r, int c, Color color){
         if (!board.isLegalMove(r, c, color)){ //could speed up code if this is removed
             System.out.println("move was not legal!!! NANI!!!");
-            return null;
+            return;
         }
         OthelloBoard newOthelloBoard = new OthelloBoard();
         OthelloPiece[][] newBoard = board.getBoard().clone();
@@ -44,6 +44,7 @@ public class OthelloBoardState {
                             int tY = c+(n*k);
                             //System.out.println("flipping: " + tX + "-" + tY);
                             newBoard[r+m*k][c+n*k] = new OthelloPiece(color);
+//                            newBoard[r+m*k][c+n*k].setColor(color); doesnt work for some fuckin reason
                         }
                         break;
                     } else {
@@ -55,8 +56,6 @@ public class OthelloBoardState {
         }
         togglePlayer();
         board.setBoard(newBoard);
-        newOthelloBoard.setBoard(newBoard);
-        return newOthelloBoard;
     }
 
     private void togglePlayer() {
@@ -72,7 +71,7 @@ public class OthelloBoardState {
     }
 
     public void setBoard(OthelloBoard board) {
-        this.board = board;
+        this.board.setBoard(board.getBoard());
     }
 
     public Color getCurrentColor() {
@@ -83,9 +82,10 @@ public class OthelloBoardState {
         this.currentColor = currentColor;
     }
 
-    public OthelloBoardState clone() {
-        OthelloBoard clonedBoard = new OthelloBoard();
-        clonedBoard.setBoard(board.getBoard().clone());
-        return new OthelloBoardState(board, currentColor);
+    @Override
+    protected OthelloBoardState clone() {
+        OthelloBoardState clone = new OthelloBoardState(new OthelloBoard(), getCurrentColor());
+        clone.setBoard(getBoard());
+        return clone;
     }
 }

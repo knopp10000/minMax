@@ -1,7 +1,5 @@
 package com.knopp10000;
 
-import java.util.Objects;
-
 public class Position {
     private int row, column;
     public Position(int r, int c) {

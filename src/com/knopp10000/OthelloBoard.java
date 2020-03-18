@@ -125,11 +125,5 @@ public class OthelloBoard {
         }
         return stringBuilder.toString();
     }
-//
-//    public OthelloBoard clone(){
-//        OthelloBoard clone = new OthelloBoard();
-//        clone.setBoard();
-//
-//    }
 }
 

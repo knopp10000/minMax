@@ -1,7 +1,6 @@
 package com.knopp10000;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
@@ -20,9 +19,8 @@ public class HumanPlayer extends Player {
             int r = sc.nextInt();
             System.out.println("Enter Columns:");
             int c = sc.nextInt();
-//            System.out.println("You picked the position at: " + r + "-" + c);
             Position pos = new Position(r, c);
-            if (!legalPositions.contains(pos)){
+            if (legalPositions.contains(pos)){
                 return pos;
             }
         }

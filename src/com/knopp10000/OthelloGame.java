@@ -33,16 +33,32 @@ public class OthelloGame {
             while(!over){
                 System.out.println("CurrentPlayer is: " + (currentPlayer.getColor() == Color.BLACK ? "Black" : "White"));
                 HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(currentPlayer.getColor());
-                System.out.print("Legal positions are: ");
-                for (Position pos: legalPositions){
-                    System.out.print(pos.getRow() + "-" + pos.getColumn() + ", ");
+                if (!legalPositions.isEmpty()){
+//                    System.out.print("Legal positions are: ");
+//                    for (Position pos: legalPositions){
+//                        System.out.print(pos.getRow() + "-" + pos.getColumn() + ", ");
+//                    }
+//                    System.out.println();
+                    Position move = currentPlayer.move(state, legalPositions);
+                    state.makeMove(move.getRow(), move.getColumn(), currentPlayer.getColor());
+
+                    System.out.println(currentPlayer.getColor() + " picked the position at: " + move.getRow() + "-" + move.getColumn());
+                    System.out.println(state.getBoard());
+
+                    togglePlayer();
+                }else{
+                    over = true;
                 }
-                System.out.println();
-                Position move = currentPlayer.move(state, legalPositions);
-                System.out.println((currentPlayer.getColor() == Color.BLACK ? "Black" : "White") + " picked the position at: " + move.getRow() + "-" + move.getColumn());
-                state.makeMove(move.getRow(), move.getColumn(), currentPlayer.getColor());
-                System.out.println(state.getBoard().toString());
-                togglePlayer();
+            }
+            System.out.println(currentPlayer.getColor() + " has no more moves! Game Over!");
+            if (state.getBoard().computeScore(currentPlayer.getColor()) > state.getBoard().computeScore(currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)){
+                System.out.println(currentPlayer.getColor() + " won with " + state.getBoard().computeScore(currentPlayer.getColor()) + " points!");
+                System.out.println((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK) + " lost with " + state.getBoard().computeScore((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)) + " points!");
+            }else if(state.getBoard().computeScore(currentPlayer.getColor()) < state.getBoard().computeScore(currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)){
+                System.out.println((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK) + " won with " + state.getBoard().computeScore((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)) + " points!");
+                System.out.println(currentPlayer.getColor() + " lost with " + state.getBoard().computeScore(currentPlayer.getColor()) + " points!");
+            }else{
+                System.out.println("ITS A DRAAAWWWWW WITH " + state.getBoard().computeScore(currentPlayer.getColor()) + " points!");
             }
         }
 }

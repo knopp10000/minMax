@@ -1,7 +1,6 @@
 package com.knopp10000;
 
 import java.util.HashSet;
-import java.util.Map;
 
 public abstract class Player {
     private Color color;
