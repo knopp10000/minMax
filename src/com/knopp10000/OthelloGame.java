@@ -11,7 +11,7 @@ public class OthelloGame {
         public OthelloGame(Player p1, Player p2) {
             this.p1 = p1;
             this.p2 = p2;
-            currentPlayer = p1;
+            currentPlayer = p2;
         }
 
         private void togglePlayer() {

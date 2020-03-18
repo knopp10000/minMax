@@ -38,16 +38,6 @@ public class OthelloBoard {
 //        board[4][4] = new OthelloPiece(BLACK);
     }
 
-//    public boolean isFull() {
-//        for (int r = 0; r<BOARD_HEIGHT; r++) {
-//            for (int c = 0; c < BOARD_WIDTH; c++)
-//                if (board[r][c] == null) {
-//                    return false;
-//                }
-//        }
-//        return true;
-//    }
-
     public int computeScore(Color color) {
         int score = 0;
         for (int r = 0; r<BOARD_HEIGHT; r++) {

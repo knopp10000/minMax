@@ -54,17 +54,16 @@ public class ComputerPlayer extends Player {
         }
 
         // action ordering
-        Map<Integer, Position> newMoves = actOrderMax(state, legalPositions);
-        Set<Position> newMoveSet = new HashSet<>(newMoves.values());
+        Map<Integer, Position> sortedPositionsMap = actOrderMax(state, legalPositions);
+        Set<Position> sortedPositons = new HashSet<>(sortedPositionsMap.values());
 
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
         Color originalColor = state.getCurrentColor();
 
-
         double responseValue = Double.NEGATIVE_INFINITY;
 
-        for (Position position : newMoveSet) {
+        for (Position position : sortedPositons) {
             state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
             responseValue = Math.max(responseValue, minVal(state, a, b, depth + 1));
 
@@ -96,9 +95,9 @@ public class ComputerPlayer extends Player {
 //        }
 //        System.out.println();
 
-        // action ordering
-        Map<Integer, Position> newMoves = actOrderMin(state, legalPositions);
-        Set<Position> newMoveSet = new HashSet<>(newMoves.values());
+//         action ordering
+        Map<Integer, Position> sortedPositionsMap = actOrderMin(state, legalPositions);
+        Set<Position> sortedPositions = new HashSet<>(sortedPositionsMap.values());
 
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
@@ -106,7 +105,7 @@ public class ComputerPlayer extends Player {
 
         double responseValue = Double.POSITIVE_INFINITY;
 
-        for (Position position : newMoveSet) {
+        for (Position position : sortedPositions) {
             //System.out.println("Testing: " + position.getRow() + "-" + position.getColumn());
             state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
             responseValue = Math.min(responseValue, maxVal(state, a, b, depth + 1));
@@ -151,7 +150,7 @@ public class ComputerPlayer extends Player {
         return newMoveSet;
     }
 
-    public Map<Integer, Position> actOrderMin(OthelloBoardState state, HashSet<Position> legalPositions) {
+    public TreeMap<Integer, Position> actOrderMin(OthelloBoardState state, HashSet<Position> legalPositions) {
         TreeMap<Integer, Position> tempMoveSet = new TreeMap<>();
 
         OthelloBoard originalBoard = new OthelloBoard();
