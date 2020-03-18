@@ -11,7 +11,7 @@ public class Game {
         public Game(Player p1, Player p2) {
             this.p1 = p1;
             this.p2 = p2;
-            currentPlayer = p2;
+            currentPlayer = p1;
         }
 
         private void togglePlayer() {
@@ -20,7 +20,8 @@ public class Game {
             }else if(currentPlayer == p2){
                currentPlayer = p1;
             }else{
-                System.out.println("isdfojisdoifijposdfoisfhoisdfhoisdhfjfdoipsdfoijfds");
+                System.out.println("togglePlayer() does not work");
+                System.exit(42);
             }
         }
 

@@ -3,12 +3,13 @@ package com.knopp10000;
 import java.util.*;
 
 public class ComputerPlayer extends Player {
-    private static final int LIMIT = 3;
+    private int depthLimit;
     private Color opposingColor;
 
-    public ComputerPlayer(Color color) {
+    public ComputerPlayer(Color color, int depthLimit) {
         super(color);
         opposingColor = getColor() == Color.BLACK? Color.WHITE : Color.BLACK;
+        this.depthLimit = depthLimit;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class ComputerPlayer extends Player {
 
     public double maxVal(BoardState state, double a, double b, int depth) {
         HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(getColor());
-        if (legalPositions.size() == 0 || depth > LIMIT) {
+        if (legalPositions.size() == 0 || depth > depthLimit) {
             return state.getBoard().computeScore(getColor());
         }
 
@@ -51,7 +52,7 @@ public class ComputerPlayer extends Player {
             state.makeMove(position.getRow(), position.getColumn(), getColor());
             responseValue = Math.max(responseValue, minVal(state, a, b, depth + 1));
 
-            // pruning
+            //prune
             if (responseValue >= b) {
                 return responseValue;
             }
@@ -65,7 +66,7 @@ public class ComputerPlayer extends Player {
     public double minVal(BoardState state, double a, double b, int depth) {
         HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(opposingColor);
 
-        if (legalPositions.size() == 0 || depth > LIMIT) {
+        if (legalPositions.size() == 0 || depth > depthLimit) {
             return -(state.getBoard().computeScore(opposingColor));
         }
 
@@ -78,7 +79,7 @@ public class ComputerPlayer extends Player {
             state.makeMove(position.getRow(), position.getColumn(), opposingColor);
             responseValue = Math.min(responseValue, maxVal(state, a, b, depth + 1));
 
-            // pruning
+            //prune
             if (responseValue <= a) {
                 return responseValue;
             }

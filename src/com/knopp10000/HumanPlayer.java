@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
-
     private Scanner sc = new Scanner(System.in);
 
     public HumanPlayer(Color color) {

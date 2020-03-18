@@ -11,10 +11,10 @@ public class BoardState {
 
     public void makeMove(int r, int c, Color color){
         if (!board.isLegalMove(r, c, color)){ //could speed up code if this is removed
-            System.out.println("move was not legal!!! NANI!!!");
+            System.out.println("move was not legal!!");
+            System.exit(66);
             return;
         }
-        //OthelloBoard newOthelloBoard = new OthelloBoard();
         Piece[][] newBoard = board.getBoard().clone();
 
         int x, y;
@@ -54,10 +54,11 @@ public class BoardState {
                 //System.out.println("One direction flip done");
             }
         }
-        togglePlayer();
+        togglePlayer(); //not in use
         board.setBoard(newBoard);
     }
 
+    //not in use
     private void togglePlayer() {
         if (currentColor == Color.BLACK){
             currentColor = Color.WHITE;
@@ -72,20 +73,5 @@ public class BoardState {
 
     public void setBoard(Board board) {
         this.board.setBoard(board.getBoard());
-    }
-
-    public Color getCurrentColor() {
-        return (currentColor ==  Color.BLACK? Color.BLACK : Color.WHITE);
-    }
-
-    public void setCurrentColor(Color currentColor) {
-        this.currentColor = (currentColor ==  Color.BLACK? Color.BLACK : Color.WHITE);
-    }
-
-    @Override
-    protected BoardState clone() {
-        Board clonedBoard = new Board();
-        clonedBoard.setBoard(getBoard().getBoard());
-        return new BoardState(clonedBoard, getCurrentColor()== Color.BLACK? Color.BLACK : Color.WHITE);
     }
 }
