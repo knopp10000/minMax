@@ -14,7 +14,7 @@ public class OthelloBoardState {
             System.out.println("move was not legal!!! NANI!!!");
             return;
         }
-        OthelloBoard newOthelloBoard = new OthelloBoard();
+        //OthelloBoard newOthelloBoard = new OthelloBoard();
         OthelloPiece[][] newBoard = board.getBoard().clone();
 
         int x, y;
@@ -75,17 +75,17 @@ public class OthelloBoardState {
     }
 
     public Color getCurrentColor() {
-        return currentColor;
+        return (currentColor ==  Color.BLACK? Color.BLACK : Color.WHITE);
     }
 
     public void setCurrentColor(Color currentColor) {
-        this.currentColor = currentColor;
+        this.currentColor = (currentColor ==  Color.BLACK? Color.BLACK : Color.WHITE);
     }
 
     @Override
     protected OthelloBoardState clone() {
-        OthelloBoardState clone = new OthelloBoardState(new OthelloBoard(), getCurrentColor());
-        clone.setBoard(getBoard());
-        return clone;
+        OthelloBoard clonedBoard = new OthelloBoard();
+        clonedBoard.setBoard(getBoard().getBoard());
+        return new OthelloBoardState(clonedBoard, getCurrentColor()== Color.BLACK? Color.BLACK : Color.WHITE);
     }
 }

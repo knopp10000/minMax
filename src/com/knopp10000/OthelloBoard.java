@@ -1,10 +1,6 @@
 package com.knopp10000;
 
-
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import static com.knopp10000.Color.BLACK;
 import static com.knopp10000.Color.WHITE;
@@ -25,7 +21,7 @@ public class OthelloBoard {
         for (int r = 0; r<BOARD_HEIGHT; r++) {
             for (int c = 0; c < BOARD_WIDTH; c++){
                 if (board[r][c] != null){
-                    this.board[r][c] = board[r][c];
+                    this.board[r][c] = new OthelloPiece(board[r][c].getColor());
                 }
             }
         }
@@ -36,17 +32,21 @@ public class OthelloBoard {
         board[3][4] = new OthelloPiece(BLACK);
         board[4][3] = new OthelloPiece(BLACK);
         board[4][4] = new OthelloPiece(WHITE);
+//        board[3][3] = new OthelloPiece(BLACK);
+//        board[3][4] = new OthelloPiece(WHITE);
+//        board[4][3] = new OthelloPiece(WHITE);
+//        board[4][4] = new OthelloPiece(BLACK);
     }
 
-    public boolean isFull() {
-        for (int r = 0; r<BOARD_HEIGHT; r++) {
-            for (int c = 0; c < BOARD_WIDTH; c++)
-                if (board[r][c] == null) {
-                    return false;
-                }
-        }
-        return true;
-    }
+//    public boolean isFull() {
+//        for (int r = 0; r<BOARD_HEIGHT; r++) {
+//            for (int c = 0; c < BOARD_WIDTH; c++)
+//                if (board[r][c] == null) {
+//                    return false;
+//                }
+//        }
+//        return true;
+//    }
 
     public int computeScore(Color color) {
         int score = 0;

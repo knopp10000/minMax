@@ -11,14 +11,16 @@ public class OthelloGame {
         public OthelloGame(Player p1, Player p2) {
             this.p1 = p1;
             this.p2 = p2;
-            currentPlayer = p2;
+            currentPlayer = p1;
         }
 
         private void togglePlayer() {
             if (currentPlayer == p1){
                 currentPlayer = p2;
+            }else if(currentPlayer == p2){
+               currentPlayer = p1;
             }else{
-                currentPlayer = p1;
+                System.out.println("isdfojisdoifijposdfoisfhoisdfhoisdhfjfdoipsdfoijfds");
             }
         }
 
@@ -26,19 +28,17 @@ public class OthelloGame {
             currentBoard.init();
             state = new OthelloBoardState(currentBoard, currentPlayer.getColor());
 
-            boolean over = false;
+            System.out.println(state.getBoard());
 
-            System.out.println(state.getBoard().toString());
-
-            while(!over){
-                System.out.println("CurrentPlayer is: " + (currentPlayer.getColor() == Color.BLACK ? "Black" : "White"));
+            while(true){
+                System.out.println("CurrentPlayer is: " + currentPlayer.getColor());
                 HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(currentPlayer.getColor());
                 if (!legalPositions.isEmpty()){
-//                    System.out.print("Legal positions are: ");
-//                    for (Position pos: legalPositions){
-//                        System.out.print(pos.getRow() + "-" + pos.getColumn() + ", ");
-//                    }
-//                    System.out.println();
+                    System.out.print("Legal positions are: ");
+                    for (Position pos: legalPositions){
+                        System.out.print(pos.getRow() + "-" + pos.getColumn() + ", ");
+                    }
+                    System.out.println();
                     Position move = currentPlayer.move(state, legalPositions);
                     state.makeMove(move.getRow(), move.getColumn(), currentPlayer.getColor());
 
@@ -47,18 +47,26 @@ public class OthelloGame {
 
                     togglePlayer();
                 }else{
-                    over = true;
+                    endGame();
+                    break;
                 }
             }
-            System.out.println(currentPlayer.getColor() + " has no more moves! Game Over!");
-            if (state.getBoard().computeScore(currentPlayer.getColor()) > state.getBoard().computeScore(currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)){
-                System.out.println(currentPlayer.getColor() + " won with " + state.getBoard().computeScore(currentPlayer.getColor()) + " points!");
-                System.out.println((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK) + " lost with " + state.getBoard().computeScore((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)) + " points!");
-            }else if(state.getBoard().computeScore(currentPlayer.getColor()) < state.getBoard().computeScore(currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)){
-                System.out.println((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK) + " won with " + state.getBoard().computeScore((currentPlayer.getColor() == Color.BLACK? Color.WHITE : Color.BLACK)) + " points!");
-                System.out.println(currentPlayer.getColor() + " lost with " + state.getBoard().computeScore(currentPlayer.getColor()) + " points!");
-            }else{
-                System.out.println("ITS A DRAAAWWWWW WITH " + state.getBoard().computeScore(currentPlayer.getColor()) + " points!");
-            }
         }
+
+    private void endGame() {
+        System.out.println(currentPlayer.getColor() + " has no more moves! Game Over!");
+
+        int p1Score = state.getBoard().computeScore(p1.getColor());
+        int p2Score = state.getBoard().computeScore(p2.getColor());
+
+        if (p1Score > p2Score){
+            System.out.println(p1.getColor() + " won with " + p1Score + " points!");
+            System.out.println(p2.getColor() + " lost with " + p2Score + " points!");
+        }else if(p1Score < p2Score){
+            System.out.println(p2.getColor() + " won with " + p2Score + " points!");
+            System.out.println(p1.getColor() + " lost with " + p1Score + " points!");
+        }else{
+            System.out.println("ITS A DRAAAWWWWW WITH " + p1Score + " points!");
+        }
+    }
 }

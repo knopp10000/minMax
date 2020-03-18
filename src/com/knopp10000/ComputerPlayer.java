@@ -30,13 +30,13 @@ public class ComputerPlayer extends Player {
         Color originalColor = state.getCurrentColor();
 
         for (Position position : legalPositions) {
-            System.out.println("Testing: " + position.getRow() + "-" + position.getColumn());
+//            System.out.println("Testing: " + position.getRow() + "-" + position.getColumn());
             state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
             //System.out.println(state.getBoard());
             double responseValue = minVal(state, max, min, depth);
 
             if (max < responseValue) {
-                System.out.println("best pos so far: " + position.getRow() + "-" + position.getColumn() + " responseValue: " + responseValue);
+                //System.out.println("best pos so far: " + position.getRow() + "-" + position.getColumn() + " responseValue: " + responseValue);
                 max = responseValue;
                 maxPosition = position;
             }
@@ -50,8 +50,7 @@ public class ComputerPlayer extends Player {
     public double maxVal(OthelloBoardState state, double a, double b, int depth) {
         HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(state.getCurrentColor());
         if (legalPositions.size() == 0 || depth > LIMIT) {
-//            return eval(state);
-            return state.getBoard().computeScore(getColor());
+            return state.getBoard().computeScore(state.getCurrentColor());
         }
 
         // action ordering
@@ -62,15 +61,16 @@ public class ComputerPlayer extends Player {
         originalBoard.setBoard(state.getBoard().getBoard());
         Color originalColor = state.getCurrentColor();
 
+
         double responseValue = Double.NEGATIVE_INFINITY;
 
         for (Position position : newMoveSet) {
-            state.makeMove(position.getRow(), position.getColumn(), getColor());
+            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
             responseValue = Math.max(responseValue, minVal(state, a, b, depth + 1));
 
             // pruning
             if (responseValue >= b) {
-                System.out.println("prune. WE would never pick: " + position.getRow() + "-" + position.getColumn());
+//                System.out.println("prune. WE would never pick: " + position.getRow() + "-" + position.getColumn());
                 return responseValue;
             }
             a = Math.max(a, responseValue);
@@ -82,13 +82,12 @@ public class ComputerPlayer extends Player {
     }
 
     public double minVal(OthelloBoardState state, double a, double b, int depth) {
-        // System.out.println(depth);
         HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(state.getCurrentColor());
 
         if (legalPositions.size() == 0 || depth > LIMIT) {
 //            return eval(board);
-//            System.out.println("deptht is reached or " + state.getCurrentColor() + " has no legalMoves left");
-            return -(state.getBoard().computeScore(opposingColor));
+            System.out.println("deptht is reached or " + state.getCurrentColor() + " has no legalMoves left");
+            return -(state.getBoard().computeScore(state.getCurrentColor()));
         }
 
 //        System.out.print(state.getCurrentColor() + " can place at: ");
@@ -116,7 +115,7 @@ public class ComputerPlayer extends Player {
 
             // pruning
             if (responseValue <= a) {
-                System.out.println("prune. " + opposingColor.toString() +  " would never pick: " + position.getRow() + "-" + position.getColumn());
+//                System.out.println("prune. " + opposingColor +  " would never pick: " + position.getRow() + "-" + position.getColumn());
                 return responseValue;
             }
             b = Math.min(b, responseValue);
@@ -130,21 +129,21 @@ public class ComputerPlayer extends Player {
     public Map<Integer, Position> actOrderMax(OthelloBoardState state, HashSet<Position> legalPositions) {
         TreeMap<Integer, Position> tempMoveSet = new TreeMap<>();
 
-//        OthelloBoard originalBoard = new OthelloBoard();
-//        originalBoard.setBoard(state.getBoard().getBoard());
-//        Color originalColor = state.getCurrentColor();
+        OthelloBoard originalBoard = new OthelloBoard();
+        originalBoard.setBoard(state.getBoard().getBoard());
+        Color originalColor = state.getCurrentColor();
 
-        OthelloBoardState originalState = state.clone();
+//        OthelloBoardState originalState = state.clone();
 
         for (Position position : legalPositions) {
-            state.makeMove(position.getRow(), position.getColumn(), getColor());
-            int val = state.getBoard().computeScore(getColor());
+            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
+            int val = state.getBoard().computeScore(state.getCurrentColor());
 //            System.out.println("(Max)Pos: " + position.getRow() + "-" + position.getColumn() + " with Score: " + val);
             //System.out.println(state.getBoard());
             tempMoveSet.put(val, position);
 
-            state.setBoard(originalState.getBoard());
-            state.setCurrentColor(originalState.getCurrentColor());
+            state.setBoard(originalBoard);
+            state.setCurrentColor(originalColor);
         }
 
         Map<Integer, Position> newMoveSet = new TreeMap<>(Collections.reverseOrder());
@@ -154,13 +153,10 @@ public class ComputerPlayer extends Player {
 
     public Map<Integer, Position> actOrderMin(OthelloBoardState state, HashSet<Position> legalPositions) {
         TreeMap<Integer, Position> tempMoveSet = new TreeMap<>();
-        //System.out.println("time to order the moves!!!!");
 
-//        OthelloBoard originalBoard = new OthelloBoard();
-//        originalBoard.setBoard(state.getBoard().getBoard());
-//        Color originalColor = state.getCurrentColor();
-
-        OthelloBoardState originalState = state.clone();
+        OthelloBoard originalBoard = new OthelloBoard();
+        originalBoard.setBoard(state.getBoard().getBoard());
+        Color originalColor = state.getCurrentColor();
 
         for (Position position : legalPositions) {
             state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
@@ -169,11 +165,12 @@ public class ComputerPlayer extends Player {
             //System.out.println("(Min)Pos: " + position.getRow() + "-" + position.getColumn() + " with Score: " + val);
             tempMoveSet.put(val, position);
 
-            state.setBoard(originalState.getBoard());
-            state.setCurrentColor(originalState.getCurrentColor());
+            state.setBoard(originalBoard);
+            state.setCurrentColor(originalColor);
         }
-        System.out.println("best move for white is(?): " + tempMoveSet.firstEntry().getValue().getRow() + "-" + tempMoveSet.firstEntry().getValue().getColumn());
-        System.out.println("worst move for white is(?): " + tempMoveSet.lastEntry().getValue().getRow() + "-" + tempMoveSet.lastEntry().getValue().getColumn());
+
+//        System.out.println("best move for white is(?): " + tempMoveSet.firstEntry().getValue().getRow() + "-" + tempMoveSet.firstEntry().getValue().getColumn());
+//        System.out.println("worst move for white is(?): " + tempMoveSet.lastEntry().getValue().getRow() + "-" + tempMoveSet.lastEntry().getValue().getColumn());
         return tempMoveSet;
     }
 }
