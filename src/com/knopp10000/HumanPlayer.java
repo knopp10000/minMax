@@ -12,7 +12,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Position move(OthelloBoardState state, HashSet<Position> legalPositions) {
+    public Position move(BoardState state, HashSet<Position> legalPositions) {
         while(true){
             System.out.println("Enter your new moves coordinates.");
             System.out.println("Enter Row:");

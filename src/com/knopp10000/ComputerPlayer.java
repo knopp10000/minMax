@@ -12,14 +12,14 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    public Position move(OthelloBoardState state, HashSet<Position> legalPositions) {
+    public Position move(BoardState state, HashSet<Position> legalPositions) {
         int depth = 1;
         double max = Double.NEGATIVE_INFINITY;
         double min = Double.POSITIVE_INFINITY;
 
         Position maxPosition = null;
 
-        OthelloBoard originalBoard = new OthelloBoard();
+        Board originalBoard = new Board();
         originalBoard.setBoard(state.getBoard().getBoard());
 
         for (Position position : legalPositions) {
@@ -36,13 +36,13 @@ public class ComputerPlayer extends Player {
         return maxPosition;
     }
 
-    public double maxVal(OthelloBoardState state, double a, double b, int depth) {
+    public double maxVal(BoardState state, double a, double b, int depth) {
         HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(getColor());
         if (legalPositions.size() == 0 || depth > LIMIT) {
             return state.getBoard().computeScore(getColor());
         }
 
-        OthelloBoard originalBoard = new OthelloBoard();
+        Board originalBoard = new Board();
         originalBoard.setBoard(state.getBoard().getBoard());
 
         double responseValue = Double.NEGATIVE_INFINITY;
@@ -62,14 +62,14 @@ public class ComputerPlayer extends Player {
         return responseValue;
     }
 
-    public double minVal(OthelloBoardState state, double a, double b, int depth) {
+    public double minVal(BoardState state, double a, double b, int depth) {
         HashSet<Position> legalPositions = state.getBoard().getAllLegalMoves(opposingColor);
 
         if (legalPositions.size() == 0 || depth > LIMIT) {
             return -(state.getBoard().computeScore(opposingColor));
         }
 
-        OthelloBoard originalBoard = new OthelloBoard();
+        Board originalBoard = new Board();
         originalBoard.setBoard(state.getBoard().getBoard());
 
         double responseValue = Double.POSITIVE_INFINITY;

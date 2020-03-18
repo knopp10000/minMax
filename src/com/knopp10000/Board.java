@@ -5,33 +5,33 @@ import java.util.HashSet;
 import static com.knopp10000.Color.BLACK;
 import static com.knopp10000.Color.WHITE;
 
-public class OthelloBoard {
+public class Board {
     public final static int BOARD_WIDTH = 8;
     public final static int BOARD_HEIGHT = 8;
 
-    private OthelloPiece[][] board = new OthelloPiece[BOARD_HEIGHT][BOARD_WIDTH];
+    private Piece[][] board = new Piece[BOARD_HEIGHT][BOARD_WIDTH];
     private Color currentPlayerColor;
 
-    public OthelloPiece[][] getBoard(){
+    public Piece[][] getBoard(){
         return board;
     }
 
-    public void setBoard(OthelloPiece[][] board) {
-        this.board = new OthelloPiece[BOARD_HEIGHT][BOARD_WIDTH];
+    public void setBoard(Piece[][] board) {
+        this.board = new Piece[BOARD_HEIGHT][BOARD_WIDTH];
         for (int r = 0; r<BOARD_HEIGHT; r++) {
             for (int c = 0; c < BOARD_WIDTH; c++){
                 if (board[r][c] != null){
-                    this.board[r][c] = new OthelloPiece(board[r][c].getColor());
+                    this.board[r][c] = new Piece(board[r][c].getColor());
                 }
             }
         }
     }
 
     void init(){
-        board[3][3] = new OthelloPiece(WHITE);
-        board[3][4] = new OthelloPiece(BLACK);
-        board[4][3] = new OthelloPiece(BLACK);
-        board[4][4] = new OthelloPiece(WHITE);
+        board[3][3] = new Piece(WHITE);
+        board[3][4] = new Piece(BLACK);
+        board[4][3] = new Piece(BLACK);
+        board[4][4] = new Piece(WHITE);
 //        board[3][3] = new OthelloPiece(BLACK);
 //        board[3][4] = new OthelloPiece(WHITE);
 //        board[4][3] = new OthelloPiece(WHITE);

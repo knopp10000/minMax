@@ -2,13 +2,13 @@ package com.knopp10000;
 
 import java.util.HashSet;
 
-public class OthelloGame {
+public class Game {
         Player p1, p2;
-        OthelloBoard currentBoard = new OthelloBoard();
+        Board currentBoard = new Board();
         Player currentPlayer;
-        OthelloBoardState state;
+        BoardState state;
 
-        public OthelloGame(Player p1, Player p2) {
+        public Game(Player p1, Player p2) {
             this.p1 = p1;
             this.p2 = p2;
             currentPlayer = p2;
@@ -26,7 +26,7 @@ public class OthelloGame {
 
         public void run() {
             currentBoard.init();
-            state = new OthelloBoardState(currentBoard, currentPlayer.getColor());
+            state = new BoardState(currentBoard, currentPlayer.getColor());
 
             System.out.println(state.getBoard());
 

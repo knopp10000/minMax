@@ -13,5 +13,5 @@ public abstract class Player {
         return color;
     }
 
-    abstract public Position move(OthelloBoardState state, HashSet<Position> legalPositions);
+    abstract public Position move(BoardState state, HashSet<Position> legalPositions);
 }

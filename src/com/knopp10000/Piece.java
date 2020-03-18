@@ -1,9 +1,9 @@
 package com.knopp10000;
 
-public class OthelloPiece {
+public class Piece {
     private Color color;
 
-    public OthelloPiece(Color color){
+    public Piece(Color color){
         this.color = color;
     }
 
