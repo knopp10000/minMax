@@ -9,6 +9,18 @@ public class BoardState {
         this.currentColor = color;
     }
 
+    /**
+     * Performs a single move in Othello/Reversi.
+     * This method checks every direction around our position {@parama r},{@parama c}
+     * to try and find another piece of the same color.
+     * When it does it sets all the opposing colored pieces in between to the {@param color}.
+     * <P>
+     *  After the move is finished we call the togglePlayer function.
+     *
+     * @param  r the row that the piece should be placed at in the board
+     * @param  c the column that the piece should be placed at in the board
+     * @param  color the color of player who makes the move
+     */
     public void makeMove(int r, int c, Color color){
         if (!board.isLegalMove(r, c, color)){ //could speed up code if this is removed
             System.out.println("move was not legal!!");
@@ -22,7 +34,6 @@ public class BoardState {
             for (int n = -1; n <= 1; n++) {
                 y = r + m;
                 x = c + n;
-                //System.out.println("place wa null desu: " + (newBoard[y][x] == null? "Ya":"Na"));
                 if (x < 0 || x >= Board.BOARD_WIDTH || y < 0 || y >= Board.BOARD_HEIGHT ||
                         newBoard[y][x] == null || newBoard[y][x].getColor() == color) {
                     continue;
@@ -35,7 +46,6 @@ public class BoardState {
                         //System.out.println(i + "-" + j + " is Null so we stop checking this direction");
                         break;
                     }
-                    //System.out.println("");
                     if (newBoard[i][j].getColor() == color) {
                         //System.out.println("found other pice to flip to: " + i + "-" + j);
                         newBoard[r][c] = new Piece(color);

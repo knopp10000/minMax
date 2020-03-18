@@ -10,8 +10,6 @@ public class Board {
     public final static int BOARD_HEIGHT = 8;
 
     private Piece[][] board = new Piece[BOARD_HEIGHT][BOARD_WIDTH];
-    private Color currentPlayerColor;
-
     public Piece[][] getBoard(){
         return board;
     }
@@ -36,20 +34,6 @@ public class Board {
 //        board[3][4] = new OthelloPiece(WHITE);
 //        board[4][3] = new OthelloPiece(WHITE);
 //        board[4][4] = new OthelloPiece(BLACK);
-    }
-
-    public int computeScore(Color color) {
-        int score = 0;
-        for (int r = 0; r<BOARD_HEIGHT; r++) {
-            for (int c = 0; c < BOARD_WIDTH; c++)
-                if (board[r][c] != null){
-                    if (board[r][c].getColor() == color) {
-                        score++;
-                    }
-                }
-
-        }
-        return score;
     }
 
     public HashSet<Position> getAllLegalMoves(Color color) {
@@ -92,6 +76,20 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public int computeScore(Color color) {
+        int score = 0;
+        for (int r = 0; r<BOARD_HEIGHT; r++) {
+            for (int c = 0; c < BOARD_WIDTH; c++)
+                if (board[r][c] != null){
+                    if (board[r][c].getColor() == color) {
+                        score++;
+                    }
+                }
+
+        }
+        return score;
     }
 
     @Override
