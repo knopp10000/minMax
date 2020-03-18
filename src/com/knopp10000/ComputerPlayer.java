@@ -1,7 +1,6 @@
 package com.knopp10000;
 
 import java.util.*;
-import java.util.concurrent.BlockingDeque;
 
 public class ComputerPlayer extends Player {
     private static final int LIMIT = 3;
@@ -53,17 +52,13 @@ public class ComputerPlayer extends Player {
             return state.getBoard().computeScore(state.getCurrentColor());
         }
 
-        // action ordering
-        Map<Integer, Position> sortedPositionsMap = actOrderMax(state, legalPositions);
-        Set<Position> sortedPositons = new HashSet<>(sortedPositionsMap.values());
-
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
         Color originalColor = state.getCurrentColor();
 
         double responseValue = Double.NEGATIVE_INFINITY;
 
-        for (Position position : sortedPositons) {
+        for (Position position : legalPositions) {
             state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
             responseValue = Math.max(responseValue, minVal(state, a, b, depth + 1));
 
@@ -95,17 +90,13 @@ public class ComputerPlayer extends Player {
 //        }
 //        System.out.println();
 
-//         action ordering
-        Map<Integer, Position> sortedPositionsMap = actOrderMin(state, legalPositions);
-        Set<Position> sortedPositions = new HashSet<>(sortedPositionsMap.values());
-
         OthelloBoard originalBoard = new OthelloBoard();
         originalBoard.setBoard(state.getBoard().getBoard());
         Color originalColor = state.getCurrentColor();
 
         double responseValue = Double.POSITIVE_INFINITY;
 
-        for (Position position : sortedPositions) {
+        for (Position position : legalPositions) {
             //System.out.println("Testing: " + position.getRow() + "-" + position.getColumn());
             state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
             responseValue = Math.min(responseValue, maxVal(state, a, b, depth + 1));
@@ -123,53 +114,5 @@ public class ComputerPlayer extends Player {
             state.setCurrentColor(originalColor);
         }
         return responseValue;
-    }
-
-    public Map<Integer, Position> actOrderMax(OthelloBoardState state, HashSet<Position> legalPositions) {
-        TreeMap<Integer, Position> tempMoveSet = new TreeMap<>();
-
-        OthelloBoard originalBoard = new OthelloBoard();
-        originalBoard.setBoard(state.getBoard().getBoard());
-        Color originalColor = state.getCurrentColor();
-
-//        OthelloBoardState originalState = state.clone();
-
-        for (Position position : legalPositions) {
-            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
-            int val = state.getBoard().computeScore(state.getCurrentColor());
-//            System.out.println("(Max)Pos: " + position.getRow() + "-" + position.getColumn() + " with Score: " + val);
-            //System.out.println(state.getBoard());
-            tempMoveSet.put(val, position);
-
-            state.setBoard(originalBoard);
-            state.setCurrentColor(originalColor);
-        }
-
-        Map<Integer, Position> newMoveSet = new TreeMap<>(Collections.reverseOrder());
-        newMoveSet.putAll(tempMoveSet);
-        return newMoveSet;
-    }
-
-    public TreeMap<Integer, Position> actOrderMin(OthelloBoardState state, HashSet<Position> legalPositions) {
-        TreeMap<Integer, Position> tempMoveSet = new TreeMap<>();
-
-        OthelloBoard originalBoard = new OthelloBoard();
-        originalBoard.setBoard(state.getBoard().getBoard());
-        Color originalColor = state.getCurrentColor();
-
-        for (Position position : legalPositions) {
-            state.makeMove(position.getRow(), position.getColumn(), state.getCurrentColor());
-            int val = -(state.getBoard().computeScore(state.getCurrentColor()));
-
-            //System.out.println("(Min)Pos: " + position.getRow() + "-" + position.getColumn() + " with Score: " + val);
-            tempMoveSet.put(val, position);
-
-            state.setBoard(originalBoard);
-            state.setCurrentColor(originalColor);
-        }
-
-//        System.out.println("best move for white is(?): " + tempMoveSet.firstEntry().getValue().getRow() + "-" + tempMoveSet.firstEntry().getValue().getColumn());
-//        System.out.println("worst move for white is(?): " + tempMoveSet.lastEntry().getValue().getRow() + "-" + tempMoveSet.lastEntry().getValue().getColumn());
-        return tempMoveSet;
     }
 }
