@@ -10,12 +10,17 @@ public class BoardState {
     }
 
     /**
-     * Performs a single move in Othello/Reversi.
-     * This method checks every direction around our position {@parama r},{@parama c}
-     * to try and find another piece of the same color.
-     * When it does it sets all the opposing colored pieces in between to the {@param color}.
+     * Performs a single move in Othello.
+     * This method checks every direction around the position, derived from the parameters r and c,
+     * to find a piece of another color and then follows that direction to
+     * find a piece of the same color. If it finds null or goes outside the board it stops checking
+     * that direction. When it finds a working direction it sets all the opposing colored pieces on
+     * that path to our color, including the original position entered.
+     * After the move is finished we call the togglePlayer function.
      * <P>
-     *  After the move is finished we call the togglePlayer function.
+     * If the position entered is not deemed legal by the "isLegalMove" method from the {@link Board} class,
+     * the system will exit. This method should only be used with moves that already
+     * have been deemed legal.
      *
      * @param  r the row that the piece should be placed at in the board
      * @param  c the column that the piece should be placed at in the board

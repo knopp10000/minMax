@@ -24,12 +24,18 @@ public class ComputerPlayer extends Player {
         originalBoard.setBoard(state.getBoard().getBoard());
 
         for (Position position : legalPositions) {
+
+            System.out.println("testing: " + position.getRow() + "-" + position.getColumn());
+
             state.makeMove(position.getRow(), position.getColumn(), getColor());
             double responseValue = minVal(state, max, min, depth);
+
+            System.out.println("responseValue: " + responseValue + " for move: " + position.getRow() + "-" + position.getColumn());
 
             if (max < responseValue) {
                 max = responseValue;
                 maxPosition = position;
+                System.out.println("max: " + max + " for move: " + position.getRow() + "-" + position.getColumn());
             }
 
             state.setBoard(originalBoard);
@@ -50,10 +56,16 @@ public class ComputerPlayer extends Player {
 
         for (Position position : legalPositions) {
             state.makeMove(position.getRow(), position.getColumn(), getColor());
+
+            System.out.println("\tThen Black can place at: " + position.getRow() + "-" + position.getColumn());
+
             responseValue = Math.max(responseValue, minVal(state, a, b, depth + 1));
+
+            System.out.println("\t(max)responseValue: " + responseValue + " for move: " + position.getRow() + "-" + position.getColumn() +"\n");
 
             //prune
             if (responseValue >= b) {
+                state.setBoard(originalBoard);
                 return responseValue;
             }
             a = Math.max(a, responseValue);
@@ -77,10 +89,17 @@ public class ComputerPlayer extends Player {
 
         for (Position position : legalPositions) {
             state.makeMove(position.getRow(), position.getColumn(), opposingColor);
+
+            System.out.println("If white places at: " + position.getRow() + "-" + position.getColumn());
+
             responseValue = Math.min(responseValue, maxVal(state, a, b, depth + 1));
+
+            System.out.println("(min)responseValue: " + responseValue + " for move: " + position.getRow() + "-" + position.getColumn());
+            System.out.println();
 
             //prune
             if (responseValue <= a) {
+                state.setBoard(originalBoard);
                 return responseValue;
             }
             b = Math.min(b, responseValue);
